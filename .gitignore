@@ -1,0 +1,10 @@
+*.dat
+*.bin
+*.png
+*.txt
+*.hdf5
+*.so
+*.err
+*.out
+density_data/
+build/
