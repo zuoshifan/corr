@@ -53,9 +53,9 @@ nu_vz = np.fromfile('vz_nu.bin', dtype=np.float32)
 nu_vz = nu_vz.reshape((N, N, N)).T
 
 # relative velocity between dark mater and neutrino
-vx = dm_vx - nu_vx
-vy = dm_vy - nu_vy
-vz = dm_vz - nu_vz
+vx = nu_vx - dm_vx
+vy = nu_vy - dm_vy
+vz = nu_vz - dm_vz
 # velocity normalization
 vx, vy, vz = norm(vx, vy, vz)
 
