@@ -6,5 +6,7 @@
 *.so
 *.err
 *.out
+zhm_code/dipole1/lp
+zhm_code/dipole2/lp
 density_data/
 build/
