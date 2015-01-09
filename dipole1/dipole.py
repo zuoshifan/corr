@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import h5py
 import correlate
@@ -7,6 +8,9 @@ N = 768 # grid size in one dimension
 num = 8 # contract number
 # r0 = 1   # grid unit
 
+
+print 'Reading data from files...'
+sys.stdout.flush()
 
 # read density data from file
 # dark mater data
@@ -39,8 +43,6 @@ nu_vz = nu_vz.reshape((N, N, N)).T
 vx = nu_vx - dm_vx
 vy = nu_vy - dm_vy
 vz = nu_vz - dm_vz
-# velocity normalization
-vx, vy, vz = correlate.norm(vx, vy, vz)
 
 # release no usefull arrays
 del dm_vx
@@ -50,21 +52,29 @@ del nu_vx
 del nu_vy
 del nu_vz
 
+v = np.empty((N, N, N, 3), dtype=np.float32)
+v[..., 0] = vx
+v[..., 1] = vy
+v[..., 2] = vz
+
+# release no usefull arrays
+del vx
+del vy
+del vz
+
 
 # ##----  test code ----------------------------------
 # N = 12
 # num = 2
 # dm_den = np.arange(12**3, dtype=np.float32).reshape(12, 12, 12).T
 # nu_den = np.arange(12**3, dtype=np.float32).reshape(12, 12, 12).T
-# vx = np.arange(12**3, dtype=np.float32).reshape(12, 12, 12).T
-# vy = np.arange(12**3, dtype=np.float32).reshape(12, 12, 12).T
-# vz = np.arange(12**3, dtype=np.float32).reshape(12, 12, 12).T
-# vx, vy, vz = correlate.norm(vx, vy, vz)
+# v = np.arange(12**3*3, dtype=np.float32).reshape(12, 12, 12, 3)
 # ##----  test code ----------------------------------
 
-
+print 'Reading data from files done.'
 print 'Start to compute...'
-r, corr = correlate.compute(dm_den, nu_den, vx, vy, vz, N, num)
+sys.stdout.flush()
+r, corr = correlate.compute(dm_den, nu_den, v, N, num)
 
 with h5py.File('corr.hdf5', 'w') as f:
     f.create_dataset('r', data=np.array(r))
